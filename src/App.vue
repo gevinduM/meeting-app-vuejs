@@ -1,32 +1,48 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
+    <Navigation :user="user" />
+    <router-view class="container" :user="user" @logout="logout" />
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import Navigation from "@/components/Navigation.vue";
+import firebase from "firebase";
+import db from "./db.js";
+import jQuery from "jquery";
+import bootstrap from "bootstrap";
+global.jQuery = jQuery;
+global.bootstrap = bootstrap;
+global.db = db;
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+export default {
+  name: "app",
+  data: function() {
+    return {
+      user: null
+    };
+  },
+  methods: {
+    logout: function() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.user = null;
+          this.$router.push("login");
+        });
     }
+  },
+  mounted() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) this.user = user.displayName;
+    });
+  },
+  components: {
+    Navigation
   }
-}
+};
+</script>
+<style lang="scss">
+@import "node_modules/bootstrap/scss/bootstrap";
 </style>
