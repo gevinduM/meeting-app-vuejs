@@ -5,7 +5,7 @@
         <i class="fas faCube"></i>
         <router-link class="navbar-brand" to="/">
           <font-awesome-icon icon="cube"></font-awesome-icon>
-          {{""}} Meeting Log
+          {{""}} Phone Book
         </router-link>
 
         <button
@@ -21,9 +21,15 @@
 
         <section class="collapse navbar-collapse" id="navbarToggleExternalContent">
           <div class="navbar-nav ml-auto">
-            <router-link class="nav-item nav-link" to="/meeting" v-if="user">Meeting</router-link>
+            <router-link class="nav-item nav-link" to="/Users/:msg" v-if="user">Users</router-link>
+            <router-link class="nav-item nav-link" to="/meeting/:user" v-if="user">Add User</router-link>
             <router-link class="nav-item nav-link" to="/Login" v-if="!user">Login</router-link>
             <router-link class="nav-item nav-link" to="/register" v-if="!user">Register</router-link>
+            <button
+              class="nav-item nav-link btn btn-link"
+              @click="$emit('logout')"
+              v-if="user"
+            >LOGOUT</button>
           </div>
         </section>
       </div>

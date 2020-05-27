@@ -64,6 +64,10 @@ export default {
         .signInWithEmailAndPassword(infor.email, infor.password)
         .then(
           () => {
+            Firebase.auth().setPersistence(Firebase.auth.Auth.Persistence.SESSION)
+              .then(function() {
+                return Firebase.auth().signInWithEmailAndPassword(infor.email, infor.password);
+              });
             this.$router.push("meeting");
           },
           error => {
